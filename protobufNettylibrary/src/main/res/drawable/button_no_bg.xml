@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/button_no_bgunpressed" android:state_pressed="false"></item>
+    <item android:drawable="@drawable/button_no_bgpressed" android:state_pressed="true"></item>
+    <item android:drawable="@drawable/button_no_bgunpressed" android:state_focused="false"></item>
+    <item android:drawable="@drawable/button_no_bgpressed" android:state_focused="true"></item>
+</selector>

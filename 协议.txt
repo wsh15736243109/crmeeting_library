@@ -1,0 +1,50 @@
+一、初始化：
+     WebSocketConfig webSocketConfig = new WebSocketConfig.Builder()
+                    .setIP("xxx.xxx.xxx.xxx")//tcp连接地址（必传）
+                    .setPORT(xxx)//端口地址（必传）
+                    .setAPP_VERSION("1.0.0")//版本号（必传）
+                    .setMODEL("Android")//设备型号信息（非必传）
+                    .setPersonMeetingId("2434tsd")//个人会议号（必传）
+                    .setPLATFORM_TYPES(4)//客户端平台类型
+                    .setMyWebSocketListener(new MyWebSocketListener() {//数据回调接口（必传）
+                                            @Override
+                                            public void conenctSuccess(Object data) {
+
+                                            }
+
+                                            @Override
+                                            public void connnectFail(String msg) {
+
+                                            }
+
+                                            @Override
+                                            public void resonponseData(Object data) {
+
+                                            }
+
+                                            @Override
+                                            public void sendFail(String msg) {
+
+                                            }
+                                        })
+                    .build();
+            WebSocketManager.getInstance().setWebSocketConfig(webSocketConfig);
+二、连接
+     WebSocketManager.getInstance().connect();
+三、业务相关
+    请求：
+        1、创建房间(roomId、headUrl,nickName)
+        2、接听电话(roomId)
+        3、结束通话(roomId)
+    响应：统一code标识 响应体通过Json传入客户端{"code":0,"data":{"room_id":"xxx","xxx":"xxx"},"error_msg":"","msg":"调用成功","message_id":"xxx"}
+        1、收到来电(推送消息 用于打开拨号邀请界面) 100
+        2、用户拒绝接听 101
+        3、用户未接听 102
+        4、用户通话中 103
+        5、用户正在被呼叫 104
+        6、用户接听成功 105
+        7、房间ID无效 106
+        8、邀请人的账号无效 107
+        9、可以召开房间 108
+
+

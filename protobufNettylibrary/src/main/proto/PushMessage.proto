@@ -1,0 +1,299 @@
+syntax = "proto3";
+package com.cr.meetingpush;
+option java_outer_classname = "MessagePushEntity";
+import "google/protobuf/timestamp.proto";
+
+message PushMessage {
+
+    //发送人就被发送人而言的用户信息
+    message SenderInfo {
+        //发送人的uuid
+        string uuid = 1;
+        //发送人的头像
+        string headUrl = 2;
+        //被发送人通讯录中的发送者的名称，如果没有，就为发送人的uuid
+        string nickName = 3;
+    }
+
+
+    message FeaturesMessage {
+
+        enum MessageType {
+            //占位
+            DefaultMessageType = 0;
+            //创建聊天室
+            CreateChatRoom = 1;
+            //结束聊天室
+            EndChatRoom = 2;
+            //拒绝通话
+            RefuseToCall = 3;
+            //接通通话
+            ReceivingCalls = 4;
+            //通话中邀请
+            InTheCallInvite = 5;
+            //通知发送人可以召开房间了
+            DetermineCreateChatRoom= 6;
+        }
+
+        message CreateChatRoomMessage {
+            //聊天室Id
+            string chatRoomId = 1;
+            //邀请的人员
+            repeated string inviteUuids = 2;
+            //发送人就被发送人而言的用户信息
+            SenderInfo sendInfo = 3;
+        }
+
+        message EndChatRoomMessage {
+        }
+
+
+        message InTheCallInviteMessage {
+            //聊天室Id
+            string chatRoomId = 2;
+            repeated string inviteUuids = 3;
+            //发送人就被发送人而言的用户信息
+            SenderInfo sendInfo = 4;
+        }
+
+
+        CreateChatRoomMessage createChatRoomMessage = 1;
+
+        EndChatRoomMessage endChatRoomMessage = 2;
+
+        InTheCallInviteMessage inTheCallInviteMessage = 4;
+
+        MessageType messageType = 3;
+
+    }
+
+    //公共信息（当前用户的一些个人信息）
+    message CommonInfo {
+        enum UserStatus {
+            //占位
+            DefaultUserStatus = 0;
+            //空闲状态
+            free = 1;
+            //通话中
+            inTheCall = 2;
+            //正在被呼叫
+            onCall = 3;
+        }
+        //当前用户uuid
+        string uuid = 1;
+        //用户状态
+        UserStatus userStatus = 3;
+    }
+
+    //用户接收指令
+    message UserAccept {
+
+        enum UserAcceptType {
+            //占位
+            DefaultUserAcceptType = 0;
+            //功能消息
+            Features = 1;
+            //Alter消息
+            Alter = 2;
+            //确认弹框
+            Popup = 3;
+            //选择框
+            SelectPopup = 4;
+            //消息推送
+            MessagePush = 5;
+            //内部指令, 一般系统或者管理员发出，界面不会有任何反馈
+            Command = 6;
+        }
+
+        //弹框消息点击效果
+        enum Click {
+            //占位
+            DefaultClick = 0;
+            //退出应用
+            Finish = 1;
+            //无效果，仅仅作为提示
+            Prompt = 2;
+            //系统升级
+            AppUp = 3;
+        }
+        enum SourceType {
+            //占位
+            DefaultSourceType = 0;
+            //服务器
+            Server = 1;
+            //管理员
+            Manager = 2;
+            //其他用户
+            OtherUser = 3;
+        }
+
+        message AlterMessage {
+
+            //alter弹框消息
+            string msg = 1;
+            //消息来源
+            string uuid = 2;
+        }
+
+        message PopupMessage {
+
+            //Popup弹框消息
+            string msg = 1;
+
+            //主题
+            string title = 2;
+
+            //消息来源
+            string uuid = 3;
+
+            Click yesClick = 4;
+
+        }
+
+        message SelectPopupMessage {
+
+            //SelectPopup弹框消息
+            string msg = 1;
+
+            //主题
+            string title = 2;
+
+            //消息来源
+            string uuid = 3;
+
+            //点击确定
+            Click yesClick = 4;
+
+            //点击取消
+            Click noClick = 5;
+
+        }
+
+        message MessagePushMessage {
+
+            //MessagePush弹框消息
+            string msg = 1;
+
+            //主题
+            string title = 2;
+
+            //消息来源
+            string uuid = 3;
+
+            //消息通知图片
+            string img = 4;
+
+        }
+
+        message CommandMessage {
+            enum DetailedType {
+                //占位
+                DefaultDetailedType = 0;
+                //服务端告诉客户端连接成功
+                ConnectSucceed = 5;
+                //告知客户端用户当前状态
+                UserNowStatus = 6;
+                //修改uuid
+                ChangeUuid = 1;
+                //服务器转移(接收到该消息需要重新连接服务器)
+                PushServerTransfer = 2;
+                //服务器维护
+                PushServerMaintain = 3;
+                //错误类型消息
+                Error = 4;
+            }
+            DetailedType detailedType = 1;
+            //根据不同的DetailedType，内容不同，比如ChangeUuid, msg就是uuid
+            string msg = 2;
+        }
+
+        UserAcceptType userAcceptType = 1;
+        AlterMessage alter = 2;
+        PopupMessage popup = 3;
+        SelectPopupMessage selectPopup = 4;
+        MessagePushMessage messagePush = 5;
+        FeaturesMessage featuresMessage = 6;
+        SourceType sourceType = 7;
+        CommandMessage commandMessage = 8;
+        //消息Id，用于异步消息对应,生成规则: 个人Id+"-"+时间戳
+        string messageId = 9;
+    }
+
+    //用户发送指令
+    message UserSend {
+
+        //发送类型
+        enum UserSendType {
+            //占位
+            DefaultUserSendType = 0;
+            //功能消息
+            Features = 1;
+            //指令消息
+            Command = 2;
+            //心跳
+            Heart = 3;
+        }
+
+        //发送指令
+        message CommandSend {
+
+            enum CommandType {
+                //占位
+                DefaultCommandType = 0;
+                //设置uuid
+                UuidSet = 1;
+            }
+
+            CommandType commandType = 1;
+
+        }
+
+        //发送平台,必传
+        message SendPlatform {
+
+            enum PlatformType {
+                //占位
+                DefaultPlatformType = 0;
+                //android
+                Android = 1;
+                //ios
+                Ios = 2;
+                //web
+                Web = 3;
+                //机顶盒
+                AndroidBox = 4;
+            }
+
+            PlatformType platformType = 1;
+
+            //机顶盒必传型号，其它平台有可能没有获取型号权限，可不传
+            string model = 2;
+
+            //app版本号,必传
+            string appVersion = 3;
+        }
+
+        //发送类型
+        UserSendType userSendType = 1;
+        //指令
+        CommandSend commandSend = 2;
+        //消息Id，用于异步消息对应,生成规则: 个人Id+"-"+时间戳
+        string messageId = 3;
+        //uuid
+        string uuid = 4;
+        //发送平台
+        SendPlatform sendPlatform = 5;
+
+        FeaturesMessage featuresMessage = 6;
+
+    }
+
+    //用户消息接收
+    UserAccept userAccept = 1;
+    //用户消息发送
+    UserSend userSend = 2;
+    //指令发送时间
+    google.protobuf.Timestamp commandTime = 3;
+    //用户信息
+    CommonInfo commonInfo = 4;
+}

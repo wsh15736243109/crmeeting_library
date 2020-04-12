@@ -1,0 +1,17 @@
+<resources>
+
+    <style name="MyAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:layout_marginLeft">0dp</item>
+        <item name="android:layout_marginRight">0dp</item>
+        <item name="android:layout_marginBottom">0dp</item>
+    </style>
+    <style name="dialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowBackground">@color/android:transparent</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+    <style name="dialogWindowAnim" parent="android:Animation" mce_bogus="1">
+        <item name="android:windowEnterAnimation">@anim/dialog_enter_anim</item>
+        <item name="android:windowExitAnimation">@anim/dialog_exit_anim</item>
+    </style>
+
+</resources>

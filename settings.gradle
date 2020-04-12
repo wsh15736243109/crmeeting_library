@@ -1,0 +1,2 @@
+include ':app', ':protobufNettylibrary'
+rootProject.name='ChatRoomApp'
